@@ -28,8 +28,8 @@ crosswordLayout.forEach(row => {
         cell.classList.add('letter');
         num.classList.add('number');
         if (letter === ' ') {
-            cell.style.backgroundColor = 'black';
-            crossCol.style.backgroundColor = 'black';
+            cell.style.backgroundColor = 'white';
+            crossCol.style.backgroundColor = 'white';
             cell.disabled = true;
         }
         else {
