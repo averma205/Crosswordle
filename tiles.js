@@ -20,7 +20,7 @@ crosswordLayout.forEach(row => {
         const num = document.createElement('label');
         num.innerHTML = '0';
         const cell = document.createElement('input');
-        cell.addEventListener("keydown", highlight(crossCol, '#b5b4b4'));
+        // cell.addEventListener("keydown", highlight(crossCol, '#b5b4b4'));
         // cell.addEventListener("keydown", highlight(crossCol, 'white'));
         crossCol.appendChild(cell);
         cell.type = 'text';
