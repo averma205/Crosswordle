@@ -24,12 +24,13 @@ crosswordLayout.forEach(row => {
         // cell.addEventListener("keydown", highlight(crossCol, 'white'));
         crossCol.appendChild(cell);
         cell.type = 'text';
+        cell.onkeydown = 'highlight(crossCol, "#b5b4b4")';
         cell.maxLength = 1;
         cell.classList.add('letter');
         num.classList.add('number');
         if (letter === ' ') {
-            cell.style.backgroundColor = 'white';
-            crossCol.style.backgroundColor = 'white';
+            cell.style.backgroundColor = 'black';
+            crossCol.style.backgroundColor = 'black';
             cell.disabled = true;
         }
         else {
