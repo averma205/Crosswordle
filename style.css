@@ -38,6 +38,7 @@ body {
 .letter:focus {
     caret-color: white;
     outline: none;
+    box-shadow: 0px;
 }
 .clues {
     text-align: left;
