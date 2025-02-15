@@ -8,6 +8,7 @@ const crosswordLayout = [
 ];
 
 const crosswordContainer = document.getElementById('crossword');
+const accent = window.getComputedStyle(document.body).getPropertyValue('--accent');
 
 function highlight(container, color) {
     container.style.backgroundColor = color;
@@ -20,11 +21,12 @@ crosswordLayout.forEach(row => {
         const num = document.createElement('label');
         num.innerHTML = '0';
         const cell = document.createElement('input');
-        // cell.addEventListener("keydown", highlight(crossCol, '#b5b4b4'));
-        // cell.addEventListener("keydown", highlight(crossCol, 'white'));
+        cell.addEventListener(`focus`, () => highlight(crossCol, accent));
+        cell.addEventListener('focusout', () => highlight(crossCol, 'white'));
+        cell.addEventListener('focusout', () => console.log(cell.value));
+        cell.setSelectionRange(1, 1);
         crossCol.appendChild(cell);
         cell.type = 'text';
-        cell.onkeydown = 'highlight(crossCol, "#b5b4b4")';
         cell.maxLength = 1;
         cell.classList.add('letter');
         num.classList.add('number');

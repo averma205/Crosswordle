@@ -1,3 +1,6 @@
+:root {
+    --accent: #e7e7e7;
+}
 body {
     font-family: Arial, sans-serif;
     text-align: center;
@@ -36,15 +39,17 @@ body {
     background-color: inherit;
 }
 .letter:focus {
-    caret-color: white;
+    caret-color: var(--accent);
     outline: none;
     box-shadow: 0px;
 }
+
 .clues {
     text-align: left;
     display: inline-block;
 }
 ::selection {
     color: white;
-    background: #b5b4b4;
+    background: color-mix(in srgb, var(--accent), #000000 35%);
+    ;
 }
