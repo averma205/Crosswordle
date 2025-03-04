@@ -32,6 +32,22 @@ body {
     }
 }
 
+/* #wordle {
+    tr {
+        gap: 5px;
+    }
+    td {
+        gap: 5px;
+        border: 0px;
+        height: 100%;
+    }
+    .letter {
+        border: 3px solid rgb(183, 183, 183);
+        height: 100%;
+        /* margin: 10px; */
+    }
+} */
+
 .number {
     vertical-align: super;
     grid-row: 1;

@@ -8,7 +8,7 @@ const crosswordLayout = [
     [' ', ' ', ' ', ' ', 'L', ' ', ' '],
     [' ', ' ', ' ', ' ', 'S', ' ', ' ']
 ];
-const wordsList = ["WEARY", "ALIEN", "INGOT", "BANAL", "GULLS"];
+const wordsList = ["weary", "alien", "ingot", "banal", "gulls"];
 const assignments = [
     ['A', ' ', 'D', ' ', ' ', ' ', ' '],
     [' ', ' ', ' ', ' ', ' ', ' ', ' '],
@@ -29,13 +29,19 @@ function highlight(container, color) {
 }
 function cell_attrs(row, col, cell) {
     cell.classList.add('letter');
+    cell.setAttribute("autocomplete", "off");
     cell.addEventListener(`focus`, () => highlight(col, accent));
     cell.addEventListener('focusout', () => highlight(col, 'white'));
-    cell.addEventListener('keydown', () => cell.value = "");
+    cell.addEventListener('keydown', function(event) {
+        cell.value = event.key;
+    });
     cell.setSelectionRange(1, 1);
     cell.type = 'text';
     cell.maxLength = 1;
 }
+
+// let idx_r = 0;
+// let idx_c = 0;
 
 crosswordLayout.forEach(row => {
     const crossRow = document.createElement('tr');
@@ -56,9 +62,12 @@ crosswordLayout.forEach(row => {
             crossCol.appendChild(num);
         }
         crossRow.appendChild(crossCol);
+        // idx_c++;
     });
     crosswordContainer.appendChild(crossRow);
     console.log(crossRow);
+    // idx_r++;
+    // idx_c = 0;
 });
 
 for (let i = 0; i < 6; i++) {
@@ -67,11 +76,14 @@ for (let i = 0; i < 6; i++) {
         const wordleCol = document.createElement('td');
         const cell = document.createElement('input');
         cell_attrs(wordleRow, wordleCol, cell);
-        cell.id = j;
+        cell.id = [i, j];
         cell.addEventListener('keyup', () => {
-            document.getElementById(j+1).focus();
+            document.getElementById([i, j+1]).disabled = false;
         })
-        if (i > 0) {
+        cell.addEventListener('keydown', () => {
+            document.getElementById([i, j+1]).focus();
+        })
+        if (i > 0 || j > 0) {
             cell.disabled = true;
         }
         wordleCol.appendChild(cell);
