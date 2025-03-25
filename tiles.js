@@ -33,7 +33,9 @@ function cell_attrs(row, col, cell) {
     cell.addEventListener(`focus`, () => highlight(col, accent));
     cell.addEventListener('focusout', () => highlight(col, 'white'));
     cell.addEventListener('keydown', function(event) {
-        cell.value = event.key;
+        if (event.key.match(/[A-Z]/i)) {
+            cell.value = event.key;
+        }
     });
     cell.setSelectionRange(1, 1);
     cell.type = 'text';
@@ -72,17 +74,34 @@ crosswordLayout.forEach(row => {
 
 for (let i = 0; i < 6; i++) {
     const wordleRow = document.createElement('tr');
+    let nextVal = "";
     for (let j = 0; j < 5; j++) {
         const wordleCol = document.createElement('td');
         const cell = document.createElement('input');
         cell_attrs(wordleRow, wordleCol, cell);
         cell.id = [i, j];
-        cell.addEventListener('keyup', () => {
-            document.getElementById([i, j+1]).disabled = false;
+        cell.addEventListener('keydown', (event) => {
+            if (event.key.match(/[A-Z]/i) && (j < 5)) {
+                nextVal = document.getElementById([i, j+1]).value;
+                document.getElementById([i, j+1]).disabled = false;
+                document.getElementById([i, j+1]).focus();
+            }
         })
-        cell.addEventListener('keydown', () => {
-            document.getElementById([i, j+1]).focus();
+        cell.addEventListener('keyup', (event) => {
+            if (!event.key.match(/[A-Z]/i)) {
+                event.stopPropagation();
+            }
+            if (j != 4) {cell.value = ""};
         })
+        cell.addEventListener('keydown', (event) => {
+            if(event.key === 'Backspace') {
+                document.getElementById([i, j-1]).focus();
+            }
+            if((event.key === 'Enter' || event.key === 'Return')) {
+                document.getElementById([i+1, 0]).disabled = false;
+                document.getElementById([i+1, 0]).focus();
+            }
+        });
         if (i > 0 || j > 0) {
             cell.disabled = true;
         }
