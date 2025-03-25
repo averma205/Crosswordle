@@ -33,7 +33,8 @@ function cell_attrs(row, col, cell) {
     cell.addEventListener(`focus`, () => highlight(col, accent));
     cell.addEventListener('focusout', () => highlight(col, 'white'));
     cell.addEventListener('keydown', function(event) {
-        if (event.key.match(/[A-Z]/i)) {
+        var key = event.keyCode;
+        if (key >= 65 && key <= 90) {
             cell.value = event.key;
         }
     });
