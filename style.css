@@ -66,14 +66,22 @@ body {
             margin-top: 2.5px;
             margin-bottom: 2.5px;
             vertical-align: middle;
+            padding: 0;
         }
         .letter {
             vertical-align: middle;
             align-content: center;
             height: 100%;
+            width: 100%;
             margin: 0;
             border: 0;
             padding: 0;
+        }
+        .correct {
+            background-color: #a8dea2;
+        }
+        .almost {
+            background-color: #ffea8f;
         }
     }
 }
@@ -81,4 +89,16 @@ body {
 ::selection {
     color: white;
     background: color-mix(in srgb, var(--accent), #000000 35%);
+}
+
+:disabled {
+    color: black;
+}
+
+#refresh {
+    height: 40px;
+    width:120px;
+    font-size: 15px;
+    vertical-align: middle;
+    align-items: center;
 }

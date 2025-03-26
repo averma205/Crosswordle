@@ -18,11 +18,13 @@ const assignments = [
     [' ', ' ', ' ', ' ', ' ', ' ', ' '],
     [' ', ' ', ' ', ' ', ' ', ' ', ' ']
 ];
+const answer = ['q', 'u', 'a', 'r', 'k'];
 
 const crosswordContainer = document.getElementById('crossword');
 const wordleContainer = document.getElementById('wordle');
 const accent = window.getComputedStyle(document.body).getPropertyValue('--accent');
 document.getElementById('refresh').addEventListener('click', () => location.reload());
+var next;
 
 function highlight(container, color) {
     container.style.backgroundColor = color;
@@ -35,7 +37,9 @@ function cell_attrs(row, col, cell, r, c) {
     cell.addEventListener('keydown', (event) => {
         var key = event.keyCode;
         if (key >= 65 && key <= 90) {
-            cell.value = event.key;
+            next = document.querySelectorAll('[id=' + CSS.escape([r,c]));
+            // next[0].value = event.key;
+            next[1].value = event.key;
         }
     });
     cell.setSelectionRange(1, 1);
@@ -78,13 +82,12 @@ crosswordLayout.forEach(row => {
 
 for (let i = 0; i < 6; i++) {
     const wordleRow = document.createElement('tr');
-    var next;
     for (let j = 0; j < 5; j++) {
         const wordleCol = document.createElement('td');
         const cell = document.createElement('input');
         cell_attrs(wordleRow, wordleCol, cell, i, j);
         cell.addEventListener('keydown', (event) => {
-            if (event.key.match(/[A-Z]/i) && (j < 5)) {
+            if (event.key.match(/[A-Z]/i) && (j < 4)) {
                 next = document.querySelectorAll('[id=' + CSS.escape([i,j+1]));
                 next[1].disabled = false;
                 next[1].focus();
@@ -99,10 +102,25 @@ for (let i = 0; i < 6; i++) {
                 }
                 else {event.stopPropagation();}
             }
-            if((event.key === 'Enter' || event.key === 'Return')) {
+            if((event.key === 'Enter' || event.key === 'Return') && j == 4) {
                 next = document.querySelectorAll('[id=' + CSS.escape([i+1,0]));
-                next[1].disabled = false;
-                next[1].focus();
+                var correct = 0
+                for (let x = 0; x < 5; x++) {
+                    var toCheck = document.querySelectorAll('[id=' + CSS.escape([i,x]))[1];
+                    console.log(answer.includes(toCheck.value.toLowerCase()));
+                    if (answer[x] == toCheck.value.toLowerCase()) {
+                        toCheck.classList.add('correct')
+                        correct++;
+                    }
+                    else if (answer.includes(toCheck.value.toLowerCase())) {
+                        toCheck.classList.add('almost')
+                    }
+                    toCheck.disabled = true;
+                }
+                if (correct != 5) {
+                    next[1].disabled = false;
+                    next[1].focus();
+                }
             }
         });
         if (i > 0 || j > 0) {
@@ -113,37 +131,3 @@ for (let i = 0; i < 6; i++) {
     }
     wordleContainer.appendChild(wordleRow);
 }
-
-console.log(document.querySelectorAll('[id=' + CSS.escape([0,0])));
-
-
-
-
-// function checkGuess() {
-//     const guess = document.getElementById("guess").value.toUpperCase();
-//     if (guess.length !== 5) {
-//         message.textContent = "Word must be 5 letters!";
-//         return;
-//     }
-
-//     for (let i = 0; i < 5; i++) {
-//         let tile = document.getElementById(`tile-${attempts}-${i}`);
-//         tile.textContent = guess[i];
-
-//         if (guess[i] === word[i]) {
-//             tile.classList.add("correct");
-//         } else if (word.includes(guess[i])) {
-//             tile.classList.add("present");
-//         } else {
-//             tile.classList.add("absent");
-//         }
-//     }
-
-//     attempts++;
-//     if (guess === word) {
-//         message.textContent = "Congratulations! You guessed the word!";
-//         return;
-//     }
-//     if (attempts === 6) {
-//         message.textContent = `Game over! The word was ${word}.`;
-//     }r        }
