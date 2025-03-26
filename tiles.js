@@ -8,17 +8,29 @@ const crosswordLayout = [
     [' ', ' ', ' ', ' ', 'l', ' ', ' '],
     [' ', ' ', ' ', ' ', 's', ' ', ' ']
 ];
-const wordsList = ["weary", "alien", "ingot", "banal", "gulls"];
 const assignments = [
-    ['A', ' ', 'D', ' ', ' ', ' ', ' '],
-    [' ', ' ', ' ', ' ', ' ', ' ', ' '],
-    [' ', ' ', 'A', ' ', 'D', ' ', ' '],
-    [' ', ' ', ' ', ' ', ' ', ' ', ' '],
-    ['A', ' ', ' ', ' ', ' ', ' ', ' '],
-    [' ', ' ', ' ', ' ', ' ', ' ', ' '],
-    [' ', ' ', ' ', ' ', ' ', ' ', ' ']
-];
-const answer = ['q', 'u', 'a', 'r', 'k'];
+    [[0,0], 1, 4],
+    [[0,2], 0, 4],
+    [[2,2], 1, 6],
+    [[4,0], 1, 4],
+    [[2,4], 0, 6]
+]
+console.log(assignments.map((a) => a[0]));
+const wordsList = [];
+var temp = "";
+let coord;
+assignments.forEach(word => {
+    coord = word[0];
+    for (let i = word[0][word[1]]; i <= word[2]; i++) {
+        temp += crosswordLayout[coord[0]][coord[1]];
+        coord[word[1]]++;
+    }
+    wordsList.push(temp);
+    temp = "";
+})
+console.log(wordsList);
+const answer = wordsList[0];
+
 
 const crosswordContainer = document.getElementById('crossword');
 const wordleContainer = document.getElementById('wordle');
@@ -57,7 +69,6 @@ function cell_attrs(row, col, cell, r, c) {
 
 let idx_r = 0;
 let idx_c = 0;
-
 crosswordLayout.forEach(row => {
     const crossRow = document.createElement('tr');
     row.forEach(letter => {
@@ -86,53 +97,56 @@ crosswordLayout.forEach(row => {
     idx_c = 0;
 });
 
-for (let i = 0; i < 6; i++) {
-    const wordleRow = document.createElement('tr');
-    for (let j = 0; j < 5; j++) {
-        const wordleCol = document.createElement('td');
-        const cell = document.createElement('input');
-        cell_attrs(wordleRow, wordleCol, cell, i, j);
-        cell.addEventListener('keydown', (event) => {
-            if (event.key.match(/[A-Z]/i) && (j < 4)) {
-                next = document.querySelectorAll('[id=' + CSS.escape([i,j+1]));
-                next[1].disabled = false;
-                next[1].focus();
-            }
-        })
-        cell.addEventListener('keydown', (event) => {
-            if(event.key === 'Backspace') {
-                if (j != 0) {
-                    next = document.querySelectorAll('[id=' + CSS.escape([i,j-1]))
-                    cell.value = ' ';
-                    next[1].focus();
-                }
-                else {event.stopPropagation();}
-            }
-            if((event.key === 'Enter' || event.key === 'Return') && j == 4) {
-                next = document.querySelectorAll('[id=' + CSS.escape([i+1,0]));
-                var correct = 0
-                for (let x = 0; x < 5; x++) {
-                    var toCheck = document.querySelectorAll('[id=' + CSS.escape([i,x]))[1];
-                    if (answer[x] == toCheck.value.toLowerCase()) {
-                        toCheck.classList.add('correct')
-                        correct++;
-                    }
-                    else if (answer.includes(toCheck.value.toLowerCase())) {
-                        toCheck.classList.add('almost')
-                    }
-                    toCheck.disabled = true;
-                }
-                if (correct != 5) {
+function createWordle() {
+    for (let i = 0; i < 6; i++) {
+        const wordleRow = document.createElement('tr');
+        for (let j = 0; j < 5; j++) {
+            const wordleCol = document.createElement('td');
+            const cell = document.createElement('input');
+            cell_attrs(wordleRow, wordleCol, cell, i, j);
+            cell.addEventListener('keydown', (event) => {
+                if (event.key.match(/[A-Z]/i) && (j < 4)) {
+                    next = document.querySelectorAll('[id=' + CSS.escape([i,j+1]));
                     next[1].disabled = false;
                     next[1].focus();
                 }
+            })
+            cell.addEventListener('keydown', (event) => {
+                if(event.key === 'Backspace') {
+                    if (j != 0) {
+                        next = document.querySelectorAll('[id=' + CSS.escape([i,j-1]))
+                        cell.value = ' ';
+                        next[1].focus();
+                    }
+                    else {event.stopPropagation();}
+                }
+                if((event.key === 'Enter' || event.key === 'Return') && j == 4) {
+                    next = document.querySelectorAll('[id=' + CSS.escape([i+1,0]));
+                    var correct = 0
+                    for (let x = 0; x < 5; x++) {
+                        var toCheck = document.querySelectorAll('[id=' + CSS.escape([i,x]))[1];
+                        if (answer[x] == toCheck.value.toLowerCase()) {
+                            toCheck.classList.add('correct')
+                            correct++;
+                        }
+                        else if (answer.includes(toCheck.value.toLowerCase())) {
+                            toCheck.classList.add('almost')
+                        }
+                        toCheck.disabled = true;
+                    }
+                    if (correct != 5) {
+                        next[1].disabled = false;
+                        next[1].focus();
+                    }
+                }
+            });
+            if (i > 0 || j > 0) {
+                cell.disabled = true;
             }
-        });
-        if (i > 0 || j > 0) {
-            cell.disabled = true;
+            wordleCol.appendChild(cell);
+            wordleRow.appendChild(wordleCol);
         }
-        wordleCol.appendChild(cell);
-        wordleRow.appendChild(wordleCol);
+        wordleContainer.appendChild(wordleRow);
     }
-    wordleContainer.appendChild(wordleRow);
 }
+createWordle();
