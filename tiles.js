@@ -1,12 +1,12 @@
 // crosswordContainer.style.gridTemplateColumns = "repeat(7, 40px)";
 const crosswordLayout = [
-    ['W', 'E', 'A', 'R', 'Y', ' ', ' '],
-    [' ', ' ', 'L', ' ', ' ', ' ', ' '],
-    [' ', ' ', 'I', 'N', 'G', 'O', 'T'],
-    [' ', ' ', 'E', ' ', 'U', ' ', ' '],
-    ['B', 'A', 'N', 'A', 'L', ' ', ' '],
-    [' ', ' ', ' ', ' ', 'L', ' ', ' '],
-    [' ', ' ', ' ', ' ', 'S', ' ', ' ']
+    ['q', 'u', 'a', 'r', 'k', ' ', ' '],
+    [' ', ' ', 'l', ' ', ' ', ' ', ' '],
+    [' ', ' ', 'i', 'n', 'g', 'o', 't'],
+    [' ', ' ', 'e', ' ', 'u', ' ', ' '],
+    ['b', 'a', 'n', 'a', 'l', ' ', ' '],
+    [' ', ' ', ' ', ' ', 'l', ' ', ' '],
+    [' ', ' ', ' ', ' ', 's', ' ', ' ']
 ];
 const wordsList = ["weary", "alien", "ingot", "banal", "gulls"];
 const assignments = [
@@ -30,15 +30,22 @@ function highlight(container, color) {
     container.style.backgroundColor = color;
 }
 function cell_attrs(row, col, cell, r, c) {
+    cell.id = [r, c];
     cell.classList.add('letter');
     cell.setAttribute("autocomplete", "off");
-    cell.addEventListener(`focus`, () => highlight(col, accent));
-    cell.addEventListener('focusout', () => highlight(col, 'white'));
+    cell.addEventListener(`focus`, () => {
+        highlight(col, accent);
+        highlight(document.querySelectorAll('[id=' + CSS.escape([r,c]))[0], accent);
+    });
+    cell.addEventListener('focusout', () => {
+        highlight(col, 'white');
+        highlight(document.querySelectorAll('[id=' + CSS.escape([r,c]))[0], 'white');
+    });
     cell.addEventListener('keydown', (event) => {
         var key = event.keyCode;
         if (key >= 65 && key <= 90) {
             next = document.querySelectorAll('[id=' + CSS.escape([r,c]));
-            // next[0].value = event.key;
+            next[0].value = event.key;
             next[1].value = event.key;
         }
     });
@@ -46,7 +53,6 @@ function cell_attrs(row, col, cell, r, c) {
     cell.type = 'text';
     cell.value = ' ';
     cell.maxLength = 1;
-    cell.id = [r, c];
 }
 
 let idx_r = 0;
@@ -97,7 +103,7 @@ for (let i = 0; i < 6; i++) {
             if(event.key === 'Backspace') {
                 if (j != 0) {
                     next = document.querySelectorAll('[id=' + CSS.escape([i,j-1]))
-                    cell.value = "";
+                    cell.value = ' ';
                     next[1].focus();
                 }
                 else {event.stopPropagation();}
@@ -107,7 +113,6 @@ for (let i = 0; i < 6; i++) {
                 var correct = 0
                 for (let x = 0; x < 5; x++) {
                     var toCheck = document.querySelectorAll('[id=' + CSS.escape([i,x]))[1];
-                    console.log(answer.includes(toCheck.value.toLowerCase()));
                     if (answer[x] == toCheck.value.toLowerCase()) {
                         toCheck.classList.add('correct')
                         correct++;
