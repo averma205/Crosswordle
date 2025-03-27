@@ -28,6 +28,9 @@ assignments.forEach(word => {
 const crosswordContainer = document.getElementById('crossword');
 const wordleContainer = document.getElementById('wordle');
 const accent = window.getComputedStyle(document.body).getPropertyValue('--accent');
+const right = window.getComputedStyle(document.body).getPropertyValue('--right');
+const wrong = window.getComputedStyle(document.body).getPropertyValue('--wrong');
+const almost = window.getComputedStyle(document.body).getPropertyValue('--almost');
 document.getElementById('refresh').addEventListener('click', () => location.reload());
 var next;
 
@@ -142,14 +145,22 @@ function createWordle(word, answer) {
                     for (let x = 0; x < 5; x++) {
                         var toCheck = document.querySelectorAll('[id=' + CSS.escape([i,x]))[1];
                         var wCheck = document.querySelectorAll('[id=' + CSS.escape(corr[x]))[0];
+                        wCheck.classList = ['letter'];
                         if (answer[x] == toCheck.value.toLowerCase()) {
                             toCheck.classList.add('correct');
-                            highlight(wCheck, '#a8dea2')
+                            wCheck.classList.add('correct');
+                            highlight(wCheck, right)
                             correct++;
                         }
                         else if (answer.includes(toCheck.value.toLowerCase())) {
                             toCheck.classList.add('almost');
-                            highlight(wCheck, '#ffea8f')
+                            wCheck.classList.add('almost');
+                            highlight(wCheck, almost)
+                        }
+                        else {
+                            toCheck.classList.add('wrong');
+                            wCheck.classList.add('wrong');
+                            highlight(wCheck, wrong)
                         }
                         toCheck.disabled = true;
                     }
