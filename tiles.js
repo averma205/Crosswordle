@@ -25,8 +25,6 @@ assignments.forEach(word => {
     wordsList.push(temp);
     temp = "";
 })
-const answer = wordsList[0];
-
 
 const crosswordContainer = document.getElementById('crossword');
 const wordleContainer = document.getElementById('wordle');
@@ -107,7 +105,8 @@ crosswordLayout.forEach(row => {
             cell.disabled = false;
             cell.addEventListener('click', () => {
                 current = assignments.map((val) => (val[0][0] == cell.id[0]) && (val[0][1] == cell.id[2]));
-                createWordle(assignments.map((e, i) => [e, current[i]]).filter((pair) => pair[1] == true)[0][0]);
+                createWordle(assignments.map((e, i) => [e, current[i]]).filter((pair) => pair[1] == true)[0][0],
+                            wordsList.map((e, i) => [e, current[i]]).filter((pair) => pair[1] == true)[0][0]);
             })
         }
         idx_c++;
@@ -117,7 +116,7 @@ crosswordLayout.forEach(row => {
     idx_c = 0;
 });
 
-function createWordle(word) {
+function createWordle(word, answer) {
     wordleContainer.innerHTML = '';
     const corr = [];
     for (let i = word[0][word[1]]; i <= word[2]; i++) {
@@ -167,4 +166,4 @@ function createWordle(word) {
         wordleContainer.appendChild(wordleRow);
     }
 }
-// createWordle();
+createWordle([[0,0],1,4]);
