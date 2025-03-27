@@ -19,21 +19,12 @@ const wordsList = [];
 let temp = "";
 let coord;
 assignments.forEach(word => {
-    coord = word[0];
-    for (let i = word[0][word[1]]; i <= word[2]; i++) {
-        temp += crosswordLayout[coord[0]][coord[1]];
-        coord[word[1]]++;
+    for (let i = 0; i <= word[2] - word[0][word[1]]; i++) {
+        temp += crosswordLayout[word[0][0] + (i * (word[1]==0?1:0))][word[0][1] + (i * word[1])];
     }
     wordsList.push(temp);
     temp = "";
 })
-assignments = [
-    [[0,0], 1, 4],
-    [[0,2], 0, 4],
-    [[2,2], 1, 6],
-    [[4,0], 1, 4],
-    [[2,4], 0, 6]
-];
 const answer = wordsList[0];
 
 
@@ -46,30 +37,29 @@ var next;
 function highlight(container, color) {
     container.style.backgroundColor = color;
 }
-function cell_attrs(row, col, cell, r, c) {
+function cell_attrs(col, cell, r, c, corr) {
     cell.id = [r, c];
     cell.classList.add('letter');
     cell.setAttribute("autocomplete", "off");
     cell.addEventListener(`focus`, () => {
         highlight(col, accent);
-        highlight(document.querySelectorAll('[id=' + CSS.escape([r,c]))[0], accent);
-        // document.querySelectorAll('[id=' + CSS.escape([r,c])).forEach(square => {
-        //     highlight(square, accent)
-        // })
+        highlight(document.querySelectorAll('[id=' + CSS.escape(corr[c]))[0], accent);
     });
     cell.addEventListener('focusout', () => {
         highlight(col, 'white');
-        highlight(document.querySelectorAll('[id=' + CSS.escape([r,c]))[0], 'white');
-        // document.querySelectorAll('[id=' + CSS.escape([r,c])).forEach(square => {
-        //     highlight(square, 'white')
-        // })
+        highlight(document.querySelectorAll('[id=' + CSS.escape(corr[c]))[0], 'white');
     });
     cell.addEventListener('keydown', (event) => {
         var key = event.keyCode;
         if (key >= 65 && key <= 90) {
-            next = document.querySelectorAll('[id=' + CSS.escape([r,c]));
+            next = document.querySelectorAll('[id=' + CSS.escape(corr[c]));
             next[0].value = event.key;
-            next[1].value = event.key;
+            cell.value = event.key;
+            if (c < 4) {
+                next = document.querySelectorAll('[id=' + CSS.escape([r,c+1]));
+                next[1].disabled = false;
+                next[1].focus();
+            }
         }
     });
     cell.setSelectionRange(1, 1);
@@ -88,8 +78,19 @@ crosswordLayout.forEach(row => {
         const num = document.createElement('label');
         num.innerHTML = '0';
         const cell = document.createElement('input');
-        cell_attrs(crossRow, crossCol, cell);
         cell.id = [idx_r, idx_c];
+        cell.classList.add('letter');
+        cell.setAttribute("autocomplete", "off");
+        cell.addEventListener(`focus`, () => {
+            highlight(crossCol, accent);
+        });
+        cell.addEventListener('focusout', () => {
+            highlight(crossCol, 'white');
+        });
+        cell.setSelectionRange(1, 1);
+        cell.type = 'text';
+        cell.value = ' ';
+        cell.maxLength = 1;
         crossCol.appendChild(cell);
         num.classList.add('number');
         cell.disabled = true;
@@ -101,16 +102,13 @@ crosswordLayout.forEach(row => {
             crossCol.appendChild(num);
         }
         crossRow.appendChild(crossCol);
-        current = assignments.map((coord) => coord[0]).map((val) =>
-            (val[0] == idx_r) && (val[1] == idx_c));
+        current = assignments.map((val) => (val[0][0] == idx_r) && (val[0][1] == idx_c));
         if (current.includes(true)) {
             cell.disabled = false;
             cell.addEventListener('click', () => {
-                console.log(current);
-                // console.log(assignments.map((e, i) => [e, current[i]]).filter((pair) => pair[1] == true)[0][0]);
-                // createWordle(assignments.map((e, i) => [e, current[i]]).filter((pair) => pair[1] == true)[0][0]);
+                current = assignments.map((val) => (val[0][0] == cell.id[0]) && (val[0][1] == cell.id[2]));
+                createWordle(assignments.map((e, i) => [e, current[i]]).filter((pair) => pair[1] == true)[0][0]);
             })
-            current++;
         }
         idx_c++;
     });
@@ -120,20 +118,17 @@ crosswordLayout.forEach(row => {
 });
 
 function createWordle(word) {
-    console.log(word);
+    wordleContainer.innerHTML = '';
+    const corr = [];
+    for (let i = word[0][word[1]]; i <= word[2]; i++) {
+        corr.push([word[0][0] + (i * (word[1]==0?1:0)), word[0][1] + (i * word[1])]);
+    }
     for (let i = 0; i < 6; i++) {
         const wordleRow = document.createElement('tr');
         for (let j = 0; j < 5; j++) {
             const wordleCol = document.createElement('td');
             const cell = document.createElement('input');
-            cell_attrs(wordleRow, wordleCol, cell, i, j);
-            cell.addEventListener('keydown', (event) => {
-                if (event.key.match(/[A-Z]/i) && (j < 4)) {
-                    next = document.querySelectorAll('[id=' + CSS.escape([i,j+1]));
-                    next[1].disabled = false;
-                    next[1].focus();
-                }
-            })
+            cell_attrs(wordleCol, cell, i, j, corr);
             cell.addEventListener('keydown', (event) => {
                 if(event.key === 'Backspace') {
                     if (j != 0) {
@@ -172,4 +167,4 @@ function createWordle(word) {
         wordleContainer.appendChild(wordleRow);
     }
 }
-createWordle();
+// createWordle();
