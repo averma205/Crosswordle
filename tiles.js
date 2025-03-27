@@ -8,16 +8,15 @@ const crosswordLayout = [
     [' ', ' ', ' ', ' ', 'l', ' ', ' '],
     [' ', ' ', ' ', ' ', 's', ' ', ' ']
 ];
-const assignments = [
+var assignments = [
     [[0,0], 1, 4],
     [[0,2], 0, 4],
     [[2,2], 1, 6],
     [[4,0], 1, 4],
     [[2,4], 0, 6]
-]
-console.log(assignments.map((a) => a[0]));
+];
 const wordsList = [];
-var temp = "";
+let temp = "";
 let coord;
 assignments.forEach(word => {
     coord = word[0];
@@ -28,7 +27,13 @@ assignments.forEach(word => {
     wordsList.push(temp);
     temp = "";
 })
-console.log(wordsList);
+assignments = [
+    [[0,0], 1, 4],
+    [[0,2], 0, 4],
+    [[2,2], 1, 6],
+    [[4,0], 1, 4],
+    [[2,4], 0, 6]
+];
 const answer = wordsList[0];
 
 
@@ -48,10 +53,16 @@ function cell_attrs(row, col, cell, r, c) {
     cell.addEventListener(`focus`, () => {
         highlight(col, accent);
         highlight(document.querySelectorAll('[id=' + CSS.escape([r,c]))[0], accent);
+        // document.querySelectorAll('[id=' + CSS.escape([r,c])).forEach(square => {
+        //     highlight(square, accent)
+        // })
     });
     cell.addEventListener('focusout', () => {
         highlight(col, 'white');
         highlight(document.querySelectorAll('[id=' + CSS.escape([r,c]))[0], 'white');
+        // document.querySelectorAll('[id=' + CSS.escape([r,c])).forEach(square => {
+        //     highlight(square, 'white')
+        // })
     });
     cell.addEventListener('keydown', (event) => {
         var key = event.keyCode;
@@ -69,6 +80,7 @@ function cell_attrs(row, col, cell, r, c) {
 
 let idx_r = 0;
 let idx_c = 0;
+var current = 0;
 crosswordLayout.forEach(row => {
     const crossRow = document.createElement('tr');
     row.forEach(letter => {
@@ -80,19 +92,26 @@ crosswordLayout.forEach(row => {
         cell.id = [idx_r, idx_c];
         crossCol.appendChild(cell);
         num.classList.add('number');
+        cell.disabled = true;
         if (letter === ' ') {
             cell.style.backgroundColor = 'black';
             crossCol.style.backgroundColor = 'black';
-            cell.disabled = true;
         }
         else {
             crossCol.appendChild(num);
         }
         crossRow.appendChild(crossCol);
+        if (assignments.map((coord) => coord[0]).map((val) =>
+            (val[0] == idx_r) && (val[1] == idx_c)).includes(true)) {
+            cell.disabled = false;
+            cell.addEventListener('click', () => {
+                createWordle();
+            })
+            current++;
+        }
         idx_c++;
     });
     crosswordContainer.appendChild(crossRow);
-    console.log(crossRow);
     idx_r++;
     idx_c = 0;
 });
