@@ -75,6 +75,7 @@ crosswordLayout.forEach(row => {
     const crossRow = document.createElement('tr');
     row.forEach(letter => {
         const crossCol = document.createElement('td');
+        crossCol.id = [idx_r * 10, idx_c * 10];
         const num = document.createElement('label');
         const cell = document.createElement('input');
         cell.id = [idx_r, idx_c];
