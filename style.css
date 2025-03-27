@@ -22,6 +22,7 @@ body {
         td {
             gap: 0px;
             border: 1px solid black;
+            padding: 0;
         }
         .number {
             vertical-align: super;
@@ -37,11 +38,22 @@ body {
             grid-column: 1 / span 1;
             font-size: xx-large;
             background-color: inherit;
+            margin: 0;
+            border: 0;
+            padding: 0;
         }
         .letter:focus {
             caret-color: var(--accent);
             outline: none;
             box-shadow: 0px;
+        }
+        .correct {
+            background-color: #a8dea2;
+            caret-color: #a8dea2;
+        }
+        .almost {
+            background-color: #f7e490;
+            caret-color: #f7e490;
         }
     }
     #crossword {
@@ -49,10 +61,14 @@ body {
         margin: 20px auto;
         height: max-content;
         width: max-content;
+        border: 1px solid black;
         tr {}
         td {
             display: grid;
             grid-template-columns: repeat(2, 25px);
+        }
+        .letter {
+            width: 248%;
         }
     }
     #wordle {
@@ -66,22 +82,12 @@ body {
             margin-top: 2.5px;
             margin-bottom: 2.5px;
             vertical-align: middle;
-            padding: 0;
         }
         .letter {
             vertical-align: middle;
             align-content: center;
             height: 100%;
             width: 100%;
-            margin: 0;
-            border: 0;
-            padding: 0;
-        }
-        .correct {
-            background-color: #a8dea2;
-        }
-        .almost {
-            background-color: #ffea8f;
         }
     }
 }

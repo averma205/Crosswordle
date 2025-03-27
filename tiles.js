@@ -73,7 +73,6 @@ crosswordLayout.forEach(row => {
     row.forEach(letter => {
         const crossCol = document.createElement('td');
         const num = document.createElement('label');
-        num.innerHTML = '0';
         const cell = document.createElement('input');
         cell.id = [idx_r, idx_c];
         cell.classList.add('letter');
@@ -100,6 +99,7 @@ crosswordLayout.forEach(row => {
         }
         crossRow.appendChild(crossCol);
         current = assignments.map((val) => (val[0][0] == idx_r) && (val[0][1] == idx_c));
+        num.innerHTML = current.lastIndexOf(true) >= 0 ? (current.lastIndexOf(true)+1).toString():String.fromCharCode(160);
         if (current.includes(true)) {
             cell.disabled = false;
             cell.addEventListener('click', () => {
@@ -141,12 +141,15 @@ function createWordle(word, answer) {
                     var correct = 0
                     for (let x = 0; x < 5; x++) {
                         var toCheck = document.querySelectorAll('[id=' + CSS.escape([i,x]))[1];
+                        var wCheck = document.querySelectorAll('[id=' + CSS.escape(corr[x]))[0];
                         if (answer[x] == toCheck.value.toLowerCase()) {
-                            toCheck.classList.add('correct')
+                            toCheck.classList.add('correct');
+                            highlight(wCheck, '#a8dea2')
                             correct++;
                         }
                         else if (answer.includes(toCheck.value.toLowerCase())) {
-                            toCheck.classList.add('almost')
+                            toCheck.classList.add('almost');
+                            highlight(wCheck, '#ffea8f')
                         }
                         toCheck.disabled = true;
                     }
@@ -166,3 +169,4 @@ function createWordle(word, answer) {
     }
 }
 createWordle([[0,0],1,4], wordsList[0]);
+document.querySelectorAll('[id=' + CSS.escape([0,0]))[1].focus();
