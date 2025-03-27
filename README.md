@@ -1,2 +1,2 @@
 # Crosswordle
-A wordle for every crossword hint.
+A wordle for every crossword answer.
