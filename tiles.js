@@ -101,11 +101,15 @@ crosswordLayout.forEach(row => {
             crossCol.appendChild(num);
         }
         crossRow.appendChild(crossCol);
-        if (assignments.map((coord) => coord[0]).map((val) =>
-            (val[0] == idx_r) && (val[1] == idx_c)).includes(true)) {
+        current = assignments.map((coord) => coord[0]).map((val) =>
+            (val[0] == idx_r) && (val[1] == idx_c));
+        if (current.includes(true)) {
             cell.disabled = false;
+            console.log(current);
             cell.addEventListener('click', () => {
-                createWordle();
+                console.log(current);
+                // console.log(assignments.map((e, i) => [e, current[i]]).filter((pair) => pair[1] == true)[0][0]);
+                // createWordle(assignments.map((e, i) => [e, current[i]]).filter((pair) => pair[1] == true)[0][0]);
             })
             current++;
         }
@@ -116,7 +120,8 @@ crosswordLayout.forEach(row => {
     idx_c = 0;
 });
 
-function createWordle() {
+function createWordle(word) {
+    console.log(word);
     for (let i = 0; i < 6; i++) {
         const wordleRow = document.createElement('tr');
         for (let j = 0; j < 5; j++) {
