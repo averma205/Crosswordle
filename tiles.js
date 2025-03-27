@@ -105,7 +105,6 @@ crosswordLayout.forEach(row => {
             (val[0] == idx_r) && (val[1] == idx_c));
         if (current.includes(true)) {
             cell.disabled = false;
-            console.log(current);
             cell.addEventListener('click', () => {
                 console.log(current);
                 // console.log(assignments.map((e, i) => [e, current[i]]).filter((pair) => pair[1] == true)[0][0]);
