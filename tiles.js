@@ -165,4 +165,4 @@ function createWordle(word, answer) {
         wordleContainer.appendChild(wordleRow);
     }
 }
-createWordle([[0,0],1,4]);
+createWordle([[0,0],1,4], wordsList[0]);
