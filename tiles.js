@@ -1,4 +1,3 @@
-// crosswordContainer.style.gridTemplateColumns = "repeat(7, 40px)";
 const crosswordLayout = [
     ['q', 'u', 'a', 'r', 'k', ' ', ' '],
     [' ', ' ', 'l', ' ', ' ', ' ', ' '],
