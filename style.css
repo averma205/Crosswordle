@@ -83,7 +83,7 @@ h1 {
         td {
             display: grid;
             grid-template-columns: repeat(2, 25px);
-            background-color: white;
+            background-color: rgb(255, 255, 255);
         }
         .letter {
             width: 248%;

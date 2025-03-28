@@ -44,7 +44,7 @@ function cell_attrs(col, cell, r, c, corr) {
     var cross = document.querySelectorAll('[id=' + CSS.escape([corr[c][0]+10, corr[c][1]+10]))[0];
     cell.addEventListener(`focus`, () => {
         highlight(col, accent);
-        if (cross.style.backgroundColor != 'white') {
+        if (cross.style.backgroundColor == '') {
             highlight(cross, accent);
         }
     });
@@ -180,7 +180,7 @@ function createWordle(word, answer) {
                         }
                         toCheck.disabled = true;
                     }
-                    if (correct != 5) {
+                    if (correct != 5 && document.querySelectorAll('[id=' + CSS.escape([i,4]))[1].value != ' ') {
                         next[1].disabled = false;
                         next[1].focus();
                     }
