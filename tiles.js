@@ -40,13 +40,14 @@ function cell_attrs(col, cell, r, c, corr) {
     cell.id = [r, c];
     cell.classList.add('letter');
     cell.setAttribute("autocomplete", "off");
+    var cross = document.querySelectorAll('[id=' + CSS.escape([corr[c][0]+10, corr[c][1]+10]))[0];
     cell.addEventListener(`focus`, () => {
         highlight(col, accent);
-        highlight(document.querySelectorAll('[id=' + CSS.escape([corr[c][0]+10, corr[c][1]+10]))[0], accent);
+        highlight(cross, accent);
     });
     cell.addEventListener('focusout', () => {
         highlight(col, 'white');
-        highlight(document.querySelectorAll('[id=' + CSS.escape([corr[c][0]+10, corr[c][1]+10]))[0], 'white');
+        highlight(cross, cross.style.backgroundColor==accent?'white':accent);
     });
     cell.addEventListener('keydown', (event) => {
         var key = event.keyCode;
@@ -108,7 +109,7 @@ crosswordLayout.forEach(row => {
             cell.addEventListener('click', () => {
                 current = assignments.map((val) => (val[0][0] == cell.id[0]) && (val[0][1] == cell.id[2]));
                 var word = assignments.map((e, i) => [e, current[i]]).filter((pair) => pair[1] == true)[0][0];
-                var answer = wordsList.map((e, i) => [e, current[i]]).filter((pair) => pair[1] == true)[0][0]
+                var answer = wordsList.map((e, i) => [e, current[i]]).filter((pair) => pair[1] == true)[0][0];
                 createWordle(word, answer);
                 document.querySelectorAll('[id=' + CSS.escape([0,0]))[1].focus();
 
@@ -122,10 +123,13 @@ crosswordLayout.forEach(row => {
 });
 
 function createWordle(word, answer) {
+    console.log(answer);
+    console.log(word);
     wordleContainer.innerHTML = '';
     const corr = [];
-    for (let i = word[0][word[1]]; i <= word[2]; i++) {
+    for (let i = 0; i <= word[2] - word[0][word[1]]; i++) {
         corr.push([word[0][0] + (i * (word[1]==0?1:0)), word[0][1] + (i * word[1])]);
+        console.log(word[0][0] + (i * (word[1]==0?1:0)), word[0][1] + (i * word[1]));
     }
     for (let i = 0; i < 6; i++) {
         const wordleRow = document.createElement('tr');
@@ -169,10 +173,12 @@ function createWordle(word, answer) {
                         }
                         toCheck.disabled = true;
                     }
+                    console.log(correct);
                     if (correct != 5) {
                         next[1].disabled = false;
                         next[1].focus();
                     }
+                    else {document.querySelectorAll('[id=' + CSS.escape(corr[0]))[0].disabled = true;}
                 }
             });
             if (i > 0 || j > 0) {

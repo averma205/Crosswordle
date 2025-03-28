@@ -1,5 +1,5 @@
 :root {
-    --accent: #e7e7e7;
+    --accent: rgb(230, 230, 230);
     --right: #53b548;
     --almost: #cab854;
     --wrong: rgb(100, 100, 100);
@@ -83,6 +83,7 @@ h1 {
         td {
             display: grid;
             grid-template-columns: repeat(2, 25px);
+            background-color: white;
         }
         .letter {
             width: 248%;
