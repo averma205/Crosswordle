@@ -16,7 +16,6 @@ var assignments = [
 ];
 const wordsList = [];
 let temp = "";
-let coord;
 assignments.forEach(word => {
     for (let i = 0; i <= word[2] - word[0][word[1]]; i++) {
         temp += crosswordLayout[word[0][0] + (i * (word[1]==0?1:0))][word[0][1] + (i * word[1])];
@@ -43,11 +42,11 @@ function cell_attrs(col, cell, r, c, corr) {
     cell.setAttribute("autocomplete", "off");
     cell.addEventListener(`focus`, () => {
         highlight(col, accent);
-        highlight(document.querySelectorAll('[id=' + CSS.escape(corr[c]))[0], accent);
+        highlight(document.querySelectorAll('[id=' + CSS.escape([corr[c][0]+10, corr[c][1]+10]))[0], accent);
     });
     cell.addEventListener('focusout', () => {
         highlight(col, 'white');
-        highlight(document.querySelectorAll('[id=' + CSS.escape(corr[c]))[0], 'white');
+        highlight(document.querySelectorAll('[id=' + CSS.escape([corr[c][0]+10, corr[c][1]+10]))[0], 'white');
     });
     cell.addEventListener('keydown', (event) => {
         var key = event.keyCode;
@@ -108,8 +107,11 @@ crosswordLayout.forEach(row => {
             cell.disabled = false;
             cell.addEventListener('click', () => {
                 current = assignments.map((val) => (val[0][0] == cell.id[0]) && (val[0][1] == cell.id[2]));
-                createWordle(assignments.map((e, i) => [e, current[i]]).filter((pair) => pair[1] == true)[0][0],
-                            wordsList.map((e, i) => [e, current[i]]).filter((pair) => pair[1] == true)[0][0]);
+                var word = assignments.map((e, i) => [e, current[i]]).filter((pair) => pair[1] == true)[0][0];
+                var answer = wordsList.map((e, i) => [e, current[i]]).filter((pair) => pair[1] == true)[0][0]
+                createWordle(word, answer);
+                document.querySelectorAll('[id=' + CSS.escape([0,0]))[1].focus();
+
             })
         }
         idx_c++;
@@ -146,22 +148,24 @@ function createWordle(word, answer) {
                     for (let x = 0; x < 5; x++) {
                         var toCheck = document.querySelectorAll('[id=' + CSS.escape([i,x]))[1];
                         var wCheck = document.querySelectorAll('[id=' + CSS.escape(corr[x]))[0];
+                        var wCell = document.querySelectorAll('[id=' + CSS.escape([corr[x][0]+10, corr[x][1]+10]))[0];
                         wCheck.classList = ['letter'];
+                        wCell.classList = []
                         if (answer[x] == toCheck.value.toLowerCase()) {
                             toCheck.classList.add('correct');
                             wCheck.classList.add('correct');
-                            highlight(wCheck, right)
+                            highlight(wCell, right)
                             correct++;
                         }
                         else if (answer.includes(toCheck.value.toLowerCase())) {
                             toCheck.classList.add('almost');
                             wCheck.classList.add('almost');
-                            highlight(wCheck, almost)
+                            highlight(wCell, almost)
                         }
                         else {
                             toCheck.classList.add('wrong');
                             wCheck.classList.add('wrong');
-                            highlight(wCheck, wrong)
+                            highlight(wCell, wrong)
                         }
                         toCheck.disabled = true;
                     }

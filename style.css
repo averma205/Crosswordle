@@ -86,15 +86,22 @@ h1 {
         }
         .letter {
             width: 248%;
+            background-color: inherit;
         }
         .correct {
+            background-color: var(--right);
             caret-color: var(--right);
+            color: white;
         }
         .almost {
+            background-color: var(--almost);
             caret-color: var(--almost);
+            color: white;
         }
         .wrong {
+            background-color: var(--wrong);
             caret-color: var(--wrong);
+            color: white;
         }
     }
     #wordle {
