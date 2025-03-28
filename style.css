@@ -17,6 +17,7 @@ h1 {
 .game {
     display: grid;
     margin: 20px auto;
+    height: max-content;
     width: max-content;
     align-items: center;
     vertical-align: middle;
@@ -76,7 +77,6 @@ h1 {
     #crossword {
         gap: 0px;
         margin: 20px auto;
-        height: max-content;
         width: max-content;
         border: 1px solid black;
         tr {}
@@ -86,6 +86,15 @@ h1 {
         }
         .letter {
             width: 248%;
+        }
+        .correct {
+            caret-color: var(--right);
+        }
+        .almost {
+            caret-color: var(--almost);
+        }
+        .wrong {
+            caret-color: var(--wrong);
         }
     }
     #wordle {
